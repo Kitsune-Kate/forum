@@ -31,6 +31,7 @@ public class UserController {
         return "registration";
     }
 
+
     @PostMapping("/registration")
     public String postMapReg(@RequestParam(name = "name") String name, @RequestParam(name = "firstName") String firstName, @RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "password-repeat") String passwordRepeat, Model model) {
         if (!password.equals(passwordRepeat)) {
