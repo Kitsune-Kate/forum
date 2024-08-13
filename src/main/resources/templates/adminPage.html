@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .content {
+        height: 100%;
+        width: 100%;
+    }
+
+    .table {
+        margin: 10px;
+        padding: 10px;
+        width: 100%;
+        overflow: scroll;
+    }
+
+    th {
+        color: black;
+        border: 1px solid black;
+    }
+
+    td {
+        border: 1px solid black;
+        width: 20px;
+        word-wrap: break-word;
+        vertical-align: top;
+    }
+
+    .currentUser {
+        text-align: right;
+    }
+</style>
+<body>
+<div class="currentUser"><h4>Current user: <span th:text="${currentUsername}"></span></h4></div>
+<div class="content">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th> ID</th>
+            <th> Role</th>
+            <th> First name</th>
+            <th> Name</th>
+            <th> Password</th>
+            <th> Username</th>
+            <th> Block</th>
+            <th> Status</th>
+            <th> Update</th>
+            <!--            <th> Active</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td><span th:text="${user.getId()}"> ID </span></td>
+            <td><span th:text="${user.getRoles()}"> ID </span></td>
+            <td><span th:text="${user.getFirstName()}"> First name </span></td>
+            <td><span th:text="${user.getName()}"> Name </span></td>
+            <td><span th:text="${user.getPassword()}"> Password </span></td>
+            <td><span th:text="${user.getUsername()}"> Username </span></td>
+            <td th:style="${user.isActive()} == FALSE ? 'background: coral' : 'background: palegreen'"><span
+                    th:text="${user.getStatus(user.isActive())}"> Status </span></td>
+            <td>
+                <form action="#" th:action="@{/buttonBan/} + ${{user.id}}" method="get">
+                    <button type="submit">
+                        <i>Ban - Unblock</i>
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form action="#" th:action="@{/updateUser/} + ${{user.id}}" method="get">
+                    <button type="submit">
+                        <i>Update</i>
+                    </button>
+                </form>
+            </td>
+
+
+            <!--            <td><span th:text="${user.}"> User </span></td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

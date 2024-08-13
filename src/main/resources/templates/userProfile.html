@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .currentUser {
+        text-align: right;
+    }
+
+    .btn {
+        border: none;
+        background-color: inherit;
+        padding: 14px 28px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    /* On mouse-over */
+    .btn:hover {
+        background: #eee;
+    }
+
+    .btnUser {
+        color: green;
+    }
+
+    .btnAdm {
+        color: orange;
+    }
+</style>
+<body>
+<div class="currentUser"><h4>Current user: <span th:text="${currentUsername}"></span></h4></div>
+<div class="content">
+    <form th:action="@{/savingNewUserData} " method="post">
+        <p>Данные пользователя:
+            <br/>
+            <label> Role :
+                <div >
+                    <input type="checkbox" th:checked="${admin}" value="admin" name="admin"/> ADMIN
+                </div>
+                <div >
+                    <input type="checkbox" th:checked="${user}" value="user" name="user"/> USER
+                </div>
+                <div >
+                    <input type="checkbox" th:checked="${mod}" value="mod" name="mod"/> MODERATOR
+                </div>
+            </label>
+            <br/>
+            <input name="id" type="hidden" th:value="${id}"/>
+            <label> Name :
+                <input name="name" type="text" th:value="${name}"/>
+            </label>
+            <br/>
+            <label> First name :
+                <input name="firstName" type="text" th:value="${firstName}"/>
+            </label>
+            <br/>
+            <label>Username :
+                <input name="username" type="text" th:value="${username}"/>
+            </label>
+            <br/>
+            <label> Password :
+                <input name="password" type="text" th:value="${password}"/>
+            </label>
+            <br/>
+            <label> Active :
+                <input name="active" type="text" th:value="${active}"/>
+            </label>
+            <br/>
+            <input type="submit" value="Save">
+        </p>
+
+    </form>
+</div>
+</body>
+</html>

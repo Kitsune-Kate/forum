@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .content {
+        /*max-width: 500px;*/
+        /*margin: auto;*/
+        height: 100%;
+        width: 100%;
+    }
+
+    .vertical-center {
+        /*margin: 0;*/
+        /*position: absolute;*/
+        /*top: 40%;*/
+        /*-ms-transform: translateY(-50%);*/
+        /*transform: translateY(-50%);*/
+        height: 100%;
+        width: 100%;
+    }
+
+    .input {
+        margin-left: 5px;
+        width: 96%;
+    }
+
+    .textarea {
+        width: 96%;
+    }
+
+    .category {
+        text-align: right;
+    }
+
+    .categoryText {
+        text-align: right;
+    }
+
+    .table {
+        margin: 10px;
+        padding: 10px;
+        width: 100%;
+        overflow: scroll;
+        background-color: #eee;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 5px;
+        border: 1px solid #000;
+    }
+
+    th {
+        background-color:#615F5F;
+        color:white;
+        border: 1px solid black;
+    }
+
+    td {
+        border: 1px solid black;
+        width: 20px;
+        word-wrap: break-word;
+        vertical-align: top;
+    }
+
+    .arrow {
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+    }
+
+    .up {
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
+    .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        vertical-align: middle;
+    }
+
+    .currentUser {
+        text-align: right;
+    }
+
+    .zoom {
+        padding: 50px;
+        transition: transform .2s; /* Animation */
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+
+    .zoom:hover {
+        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+<body>
+<div class="currentUser"><h4>Current user: <span th:text="${currentUsername}"></span></h4></div>
+<div class="content">
+    <div class="vertical-center">
+        <form th:action="@{/createMessage}" method="post" enctype="multipart/form-data">
+            <h4>Тема: <input class="input" type="text" name="title" size="40"></h4>
+            <h4>Текст: <textarea class="textarea" style="vertical-align: top" name="textarea" rows="5"
+                                 cols="40"></textarea></h4>
+            <br/>
+            <div class="form-group">
+                <input type="file" name="image" accept="image/*" class="form-control-file">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload image</button>
+            <br/>
+            <div class="category">
+                <div class="categoryText"><h5>Отправить сообщение:</h5></div>
+                <select name="choice">
+                    <option value="SPORT">SPORT</option>
+                    <option value="FOOD">FOOD</option>
+                    <option value="ANIMALS">ANIMALS</option>
+                    <option value="IT">IT</option>
+                    <input type="submit">
+                </select>
+            </div>
+
+        </form>
+        <form th:action="@{/filter}" method="post">
+            <br/>
+            <div class="categoryText"><h5>Отфильтровать записи по категории:</h5></div>
+            <div class="category">
+                <select name="choice">
+                    <option value="SPORT">SPORT</option>
+                    <option value="FOOD">FOOD</option>
+                    <option value="ANIMALS">ANIMALS</option>
+                    <option value="IT">IT</option>
+                    <input type="submit">
+                </select>
+            </div>
+        </form>
+        </form>
+
+        <!--        !!!!!!!!!!!-->
+        <form th:action="@{/filterUser}" method="post">
+            <br/>
+            <div class="categoryText"><h5>Отфильтровать записи по имени пользователя:</h5></div>
+            <div class="category">
+                <select name="username">
+                    <option value="0" selected="selected">All</option>
+                    <option th:each="username : ${userNames}" th:text="${username}"></option>
+                </select>
+                <input type="submit">
+            </div>
+        </form>
+
+        <form th:action="@{/sorted}" method="post">
+            <input type="hidden" name="type" value="asc">
+            <p>Новые записи:
+                <button class="arrow up"></button>
+            </p>
+        </form>
+        <form th:action="@{/sorted}" method="post">
+            <input type="hidden" name="type" value="desc">
+            <p>Старые записи:
+                <button class="arrow down"></button>
+            </p>
+        </form>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th> Title</th>
+                <th> Message</th>
+                <th> Category</th>
+                <th> Date</th>
+                <th> User</th>
+                <th> Image</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="m : ${messages}">
+                <tr>
+                    <td><span th:text="${m.title}"> Title </span></td>
+                    <td><span th:text="${m.textarea}"> Message </span></td>
+                    <td><span th:text="${m.choice}"> Category </span></td>
+                    <td><span th:text="${m.dateFormatter()}"> Date </span></td>
+                    <td><span th:text="${m.userName}"> User </span></td>
+                    <td>
+                        <div class="zoom"><img th:src="@{/img/{filename}(filename = ${m.filename})}"></div>
+                    </td>
+
+                    <!--   <div class="zoom"><img th:src="@{/img/{filename}(filename = ${m.filename})}"></div>                  </td>-->
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
